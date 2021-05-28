@@ -1,0 +1,28 @@
+{%extends "base.html"%}
+{%block title %}User{%endblock%}
+
+
+{%block content%}
+	{%with messages=get_flashed_messages()%}
+		{%if messages%}
+			{%for msg in messages%}
+				<p>{{msg}}</p>
+			{%endfor%}
+		
+		{%endif%}
+	{%endwith%}
+	<form action="#" method="POST">
+		<input type="email" name="email" placeholder="Enter Email" value="{{email if email}}"/>
+		<input type="submit" value="submit"/>
+	</form>
+
+	<script language="javascript">
+	function delete_account(account_id) {
+	　fetch("/delete_account",{
+		method:"POST",
+		body:JSON.stringify({account_id:account_id}),});
+	}
+	</script>
+	<br />
+	<button type="button" onClick="delete_account({{user.id}})" ><P>刪除帳號!!!</P></button>
+{%endblock%}
