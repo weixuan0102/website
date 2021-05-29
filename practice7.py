@@ -1,4 +1,4 @@
-from flask import Flask, redirect , url_for, render_template, request, session, flash, jsonify
+from flask import Flask, redirect , url_for, render_template, request, session, flash, jsonify, make_response
 from datetime import timedelta
 from flask_sqlalchemy import SQLAlchemy
 
@@ -13,7 +13,7 @@ db=SQLAlchemy(app)
 
 #model
 class users(db.Model):
-	_id=db.Column("id",db.Integer,primary_key=True)
+	id=db.Column("id",db.Integer,primary_key=True) #####
 	name=db.Column(db.String(100))
 	email=db.Column(db.String(100))
 
@@ -50,8 +50,9 @@ def login():
 	else:
 		if "user" in session:
 			flash("already logged in")
-			
+
 			return redirect(url_for("user"))
+		
 		return render_template("login.html")
 
 @app.route("/user",methods=["POST","GET"])
@@ -85,9 +86,14 @@ def delete_account():
 		db.session.delete(target)
 		db.session.commit()
 		flash("You deleted your account")
-		return redirect(url_for("login()"))
 
-	return jsonify({})
+		session.pop("user",None) #####
+		session.pop("email",None) #####
+	return make_response('', 200) #####
+
+	#return jsonify({})  #####
+	
+	
 	#found_user=users.query.filter_by(name=user).all()
 	#if found_user :
 		#for user in found_user:
